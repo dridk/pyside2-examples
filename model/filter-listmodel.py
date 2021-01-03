@@ -14,6 +14,10 @@ class GameListModel(QAbstractListModel):
             {"name": "Tomb Raider", "description": "Action game"},
             {"name": "Super Mario", "description": "Aracade game"},
             {"name": "Civilization", "description": "Strategie game"},
+            {"name": "caramagedon", "description": "car racer"},
+            {"name": "Age of empire", "description": "Strategie game"},
+            {"name": "Civilization 3", "description": "Strategie game"},
+            {"name": "Metal gear solid", "description": "action game"},
         ]
 
     def rowCount(self, parent=QModelIndex()):
@@ -42,11 +46,21 @@ class GameListModel(QAbstractListModel):
 if __name__ == "__main__":
     app = QApplication(sys.argv)
 
+    widget = QWidget()
+    search_edit = QLineEdit()
     view = QListView()
+    layout = QVBoxLayout()
+    layout.addWidget(search_edit)
+    layout.addWidget(view)
+    widget.setLayout(layout)
+
     model = GameListModel()
+    proxy_model = QSortFilterProxyModel()
+    proxy_model.setSourceModel(model)
+    view.setModel(proxy_model)
 
-    view.setModel(model)
+    search_edit.textChanged.connect(proxy_model.setFilterRegExp)
 
-    view.show()
+    widget.show()
 
     app.exec_()
